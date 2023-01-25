@@ -9,7 +9,7 @@ exports.up = (pgm) => {
     year: { type: 'smallint', notNull: true },
     performer: { type: 'varchar(255)', notNull: true },
     genre: { type: 'varchar(255)', notNull: true },
-    duration: { type: 'smallint', notNull: true },
+    duration: { type: 'smallint', notNull: false },
     album_id: { type: 'varchar(30)', notNull: false },
     created_at: { type: 'text', notNull: true },
     updated_at: { type: 'text', notNull: true },
