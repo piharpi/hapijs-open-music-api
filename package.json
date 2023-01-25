@@ -1,0 +1,35 @@
+{
+  "name": "hapijs-open-music-api",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start-dev": "nodemon ./src/server.js",
+    "migrate": "node-pg-migrate",
+    "lint": "eslint ./src/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/piharpi/hapijs-open-music-api.git"
+  },
+  "author": "Mahendrata Harpi",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/piharpi/hapijs-open-music-api/issues"
+  },
+  "homepage": "https://github.com/piharpi/hapijs-open-music-api#readme",
+  "dependencies": {
+    "@hapi/hapi": "^21.0.0",
+    "dotenv": "^16.0.3",
+    "joi": "^17.7.0",
+    "nanoid": "3.x.x",
+    "node-pg-migrate": "^6.2.2",
+    "pg": "^8.8.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.32.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.27.5",
+    "nodemon": "^2.0.20"
+  }
+}
