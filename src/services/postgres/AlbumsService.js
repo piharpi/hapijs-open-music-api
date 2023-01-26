@@ -12,20 +12,19 @@ class AlbumsService {
   async addAlbum({ name, year }) {
     const id = `album-${nanoid(16)}`;
     const createdAt = new Date().toISOString();
-    const updatedAt = createdAt;
 
     const query = {
-      text: 'INSERT INTO albums VALUES($1, $2, $3, $4, $5) RETURNING id',
-      values: [id, name, year, createdAt, updatedAt],
+      text: 'INSERT INTO albums VALUES($1, $2, $3, $4, $4) RETURNING id',
+      values: [id, name, year, createdAt],
     };
 
-    const result = await this._pool.query(query);
+    const { rows } = await this._pool.query(query);
 
-    if (!result.rows[0].id) {
+    if (!rows[0].id) {
       throw new InvariantError('Album gagal ditambahkan.');
     }
 
-    return result.rows[0].id;
+    return rows[0].id;
   }
 
   async getAlbumById(id) {
@@ -38,19 +37,19 @@ class AlbumsService {
       values: [id],
     };
 
-    const result = await this._pool.query(query);
+    const { rows, rowCount } = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('Album tidak ditemukan.');
     }
 
-    const { album_id, name, year } = result.rows[0];
+    const { album_id: albumId, name, year } = rows[0];
 
     return {
-      id: album_id,
+      id: albumId,
       name,
       year,
-      songs: result.rows.map(mapDbToSongs).filter(Boolean),
+      songs: rows.map(mapDbToSongs).filter(Boolean),
     };
   }
 
@@ -61,9 +60,9 @@ class AlbumsService {
       values: [name, year, updatedAt, id],
     };
 
-    const result = await this._pool.query(query);
+    const { rowCount } = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('Gagal memperbarui album. Id tidak ditemukan.');
     }
   }
@@ -74,9 +73,9 @@ class AlbumsService {
       values: [id],
     };
 
-    const result = await this._pool.query(query);
+    const { rowCount } = await this._pool.query(query);
 
-    if (!result.rows.length) {
+    if (!rowCount) {
       throw new NotFoundError('Album gagal dihapus. Id tidak ditemukan.');
     }
   }

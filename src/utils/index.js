@@ -1,7 +1,7 @@
-const mapDbToSongs = ({ song_id, title, performer }) => {
-  if (song_id != null) {
+const mapDbToSongs = ({ song_id: songId, title, performer }) => {
+  if (songId != null) {
     return {
-      id: song_id,
+      id: songId,
       title,
       performer,
     };
