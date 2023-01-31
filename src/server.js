@@ -16,10 +16,16 @@ const users = require('./api/users');
 const UsersService = require('./services/postgres/UsersService');
 const UsersValidator = require('./validator/users');
 
+const authentications = require('./api/authentications');
+const AuthenticationsService = require('./services/postgres/AuthenticationsService');
+const AuthenticationsValidator = require('./validator/authentications');
+const TokenManager = require('./tokenize/TokenManager');
+
 const init = async () => {
   const albumsService = new AlbumsService();
   const songsService = new SongsService();
   const usersService = new UsersService();
+  const authenticationsService = new AuthenticationsService();
 
   const server = Hapi.server({
     host: process.env.HOST,
@@ -53,6 +59,15 @@ const init = async () => {
         validator: UsersValidator,
       },
     },
+    {
+      plugin: authentications,
+      options: {
+        authenticationsService,
+        usersService,
+        tokenManager: TokenManager,
+        validator: AuthenticationsValidator,
+      },
+    },
   ]);
 
   server.ext('onPreResponse', (request, h) => {
@@ -76,6 +91,7 @@ const init = async () => {
         message: 'Maaf, terjadi kegagalan pada server kami.',
       });
       newResponse.code(500);
+      console.log(response);
       return newResponse;
     }
 
