@@ -98,9 +98,9 @@ class PlaylistsService {
       throw new NotFoundError('Playlists tidak ditemukan');
     }
 
-    const note = rows[0];
+    const playlist = rows[0];
 
-    if (note.owner !== owner) {
+    if (playlist.owner !== owner) {
       throw new AuthorizationError('Anda tidak berhak mengakses resource ini');
     }
   }
