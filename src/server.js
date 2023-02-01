@@ -21,6 +21,8 @@ const playlists = require('./api/playlists');
 const PlaylistsService = require('./services/postgres/PlaylistsService');
 const PlaylistsValidator = require('./validator/playlists');
 
+const PlaylistActivitiesService = require('./services/postgres/PlaylistActivitiesService');
+
 const authentications = require('./api/authentications');
 const AuthenticationsService = require('./services/postgres/AuthenticationsService');
 const AuthenticationsValidator = require('./validator/authentications');
@@ -31,6 +33,7 @@ const init = async () => {
   const songsService = new SongsService();
   const usersService = new UsersService();
   const playlistsService = new PlaylistsService();
+  const playlistActivitiesService = new PlaylistActivitiesService();
   const authenticationsService = new AuthenticationsService();
 
   const server = Hapi.server({
@@ -49,7 +52,6 @@ const init = async () => {
     },
   ]);
 
-  // mendefinisikan strategy autentikasi Jwt
   server.auth.strategy('openmusic_api_jwt', 'jwt', {
     keys: process.env.ACCESS_TOKEN_KEY,
     verify: {
@@ -93,6 +95,7 @@ const init = async () => {
       options: {
         playlistsService,
         songsService,
+        playlistActivitiesService,
         validator: PlaylistsValidator,
       },
     },
