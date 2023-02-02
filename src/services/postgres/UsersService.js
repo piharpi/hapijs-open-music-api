@@ -16,12 +16,11 @@ class UsersService {
 
     const id = `user-${nanoid(16)}`;
     const hashedPassword = await bcrypt.hash(password, 10);
-    const query = {
+
+    const { rows, rowCount } = await this._pool.query({
       text: 'INSERT INTO users VALUES($1, $2, $3, $4) RETURNING id',
       values: [id, username, hashedPassword, fullname],
-    };
-
-    const { rows, rowCount } = await this._pool.query(query);
+    });
 
     if (!rowCount) {
       throw new InvariantError('User gagal ditambahkan');
@@ -31,12 +30,10 @@ class UsersService {
   }
 
   async getUserById(userId) {
-    const query = {
+    const { rows, rowCount } = await this._pool.query({
       text: 'SELECT id, username, fullname FROM users WHERE id = $1',
       values: [userId],
-    };
-
-    const { rows, rowCount } = await this._pool.query(query);
+    });
 
     if (!rowCount) {
       throw new NotFoundError('User tidak ditemukan');
@@ -46,12 +43,10 @@ class UsersService {
   }
 
   async verifyNewUsername(username) {
-    const query = {
+    const { rowCount } = await this._pool.query({
       text: 'SELECT username FROM users WHERE username = $1',
       values: [username],
-    };
-
-    const { rowCount } = await this._pool.query(query);
+    });
 
     if (rowCount > 0) {
       throw new InvariantError('Gagal menambahkan user. Username sudah digunakan.');
@@ -59,12 +54,10 @@ class UsersService {
   }
 
   async verifyUserCredential(username, password) {
-    const query = {
+    const { rows, rowCount } = await this._pool.query({
       text: 'SELECT id, username, password FROM users WHERE username = $1',
       values: [username],
-    };
-
-    const { rows, rowCount } = await this._pool.query(query);
+    });
 
     if (!rowCount) {
       throw new AuthenticationError('Kredensial yang Anda berikan salah');

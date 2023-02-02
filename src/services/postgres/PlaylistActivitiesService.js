@@ -27,10 +27,10 @@ class PlaylistActivitiesService {
   async getPlaylistActivitiesById(playlistId) {
     const { rows } = await this._pool.query({
       text: `SELECT u.username, s.title, action, time
-             FROM playlist_song_activities psa
-             JOIN users u ON u.id = psa.user_id
-             JOIN songs s ON s.id = psa.song_id
-             WHERE playlist_id = $1`,
+               FROM playlist_song_activities psa
+               JOIN users u ON u.id = psa.user_id
+               JOIN songs s ON s.id = psa.song_id
+              WHERE playlist_id = $1`,
       values: [playlistId],
     });
 
