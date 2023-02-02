@@ -1,30 +1,12 @@
 /* eslint-disable camelcase */
 exports.up = (pgm) => {
   pgm.createTable('playlist_song_activities', {
-    id: {
-      type: 'varchar(50)',
-      primaryKey: true,
-    },
-    playlist_id: {
-      type: 'varchar(50)',
-      notNull: true,
-    },
-    song_id: {
-      type: 'varchar(50)',
-      notNull: true,
-    },
-    user_id: {
-      type: 'varchar(50)',
-      notNull: true,
-    },
-    action: {
-      type: 'varchar(10)',
-      notNull: true,
-    },
-    time: {
-      type: 'text',
-      notNull: true,
-    },
+    id: { type: 'varchar(50)', primaryKey: true },
+    playlist_id: { type: 'varchar(50)', notNull: true },
+    song_id: { type: 'varchar(50)', notNull: true },
+    user_id: { type: 'varchar(50)', notNull: true },
+    action: { type: 'varchar(10)', notNull: true },
+    time: { type: 'text', notNull: true },
   });
 
   pgm.addConstraint(

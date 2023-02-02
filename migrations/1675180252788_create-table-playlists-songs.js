@@ -2,14 +2,8 @@
 
 exports.up = (pgm) => {
   pgm.createTable('playlists_songs', {
-    playlist_id: {
-      type: 'varchar(50)',
-      notNull: true,
-    },
-    song_id: {
-      type: 'varchar(50)',
-      notNull: true,
-    },
+    playlist_id: { type: 'varchar(50)', notNull: true },
+    song_id: { type: 'varchar(50)', notNull: true },
   });
 
   pgm.addConstraint(

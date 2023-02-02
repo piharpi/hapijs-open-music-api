@@ -2,18 +2,9 @@
 
 exports.up = (pgm) => {
   pgm.createTable('collaborations', {
-    id: {
-      type: 'varchar(50)',
-      primaryKey: true,
-    },
-    playlist_id: {
-      type: 'varchar(50)',
-      notNull: true,
-    },
-    user_id: {
-      type: 'varchar(50)',
-      notNull: true,
-    },
+    id: { type: 'varchar(50)', primaryKey: true },
+    playlist_id: { type: 'varchar(50)', notNull: true },
+    user_id: { type: 'varchar(50)', notNull: true },
   });
 
   pgm.addConstraint(
