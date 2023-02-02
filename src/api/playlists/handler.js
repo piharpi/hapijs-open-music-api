@@ -14,14 +14,15 @@ class PlaylistsHandler {
 
     const playlistId = await this._playlistsService.addPlaylist(name, credentialId);
 
-    const response = h.response({
-      status: 'success',
-      data: {
-        playlistId,
-      },
-    });
+    const response = h
+      .response({
+        status: 'success',
+        data: {
+          playlistId,
+        },
+      })
+      .code(201);
 
-    response.code(201);
     return response;
   }
 
@@ -108,12 +109,13 @@ class PlaylistsHandler {
 
     await this._playlistActivitiesService.addedSongActivity({ playlistId, songId, userId });
 
-    const response = h.response({
-      status: 'success',
-      message: 'Lagu berhasil ditambahkan diplaylist',
-    });
+    const response = h
+      .response({
+        status: 'success',
+        message: 'Lagu berhasil ditambahkan diplaylist',
+      })
+      .code(201);
 
-    response.code(201);
     return response;
   }
 

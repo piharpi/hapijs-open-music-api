@@ -14,14 +14,16 @@ class UsersHandler {
       fullname,
     });
 
-    const response = h.response({
-      status: 'success',
-      message: 'User berhasil ditambahkan',
-      data: {
-        userId,
-      },
-    });
-    response.code(201);
+    const response = h
+      .response({
+        status: 'success',
+        message: 'User berhasil ditambahkan',
+        data: {
+          userId,
+        },
+      })
+      .code(201);
+
     return response;
   }
 
