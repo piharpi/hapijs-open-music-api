@@ -41,6 +41,7 @@ const ProducerService = require('./services/rabbitmq/ProducerService');
 const ExportsValidator = require('./validator/exports');
 
 const StorageService = require('./services/storage/StorageService');
+const AlbumLikesService = require('./services/postgres/AlbumLikesService');
 
 const init = async () => {
   const albumsService = new AlbumsService();
@@ -51,6 +52,7 @@ const init = async () => {
   const playlistActivitiesService = new PlaylistActivitiesService();
   const authenticationsService = new AuthenticationsService();
   const storageService = new StorageService(path.resolve(__dirname, 'api/albums/file/images'));
+  const albumLikesService = new AlbumLikesService();
 
   const server = Hapi.server({
     host: config.app.host,
@@ -93,6 +95,7 @@ const init = async () => {
       options: {
         albumsService,
         storageService,
+        albumLikesService,
         validator: AlbumsValidator,
       },
     },
