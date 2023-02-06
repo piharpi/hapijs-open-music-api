@@ -2,8 +2,9 @@ const { Pool } = require('pg');
 const { nanoid } = require('nanoid');
 
 class AlbumLikesService {
-  constructor() {
+  constructor(cacheService) {
     this._pool = new Pool();
+    this._cacheService = cacheService;
   }
 
   async toggleLikeAlbum({ userId, albumId }) {
@@ -25,16 +26,27 @@ class AlbumLikesService {
     const query = rowCount ? deleteQuery : insertQuery;
     await this._pool.query(query);
 
+    this._cacheService.del(`likes:${albumId}`);
+
     return rowCount;
   }
 
   async getAlbumLikes(albumId) {
-    const { rowCount } = await this._pool.query({
-      text: `SELECT * FROM user_album_likes WHERE album_id = $1`,
-      values: [albumId],
-    });
+    let rowCount = 0;
 
-    return rowCount;
+    try {
+      rowCount = parseInt(await this._cacheService.get(`likes:${albumId}`), 10);
+      return { likes: rowCount, cached: true };
+    } catch (_) {
+      ({ rowCount } = await this._pool.query({
+        text: `SELECT id FROM user_album_likes WHERE album_id = $1`,
+        values: [albumId],
+      }));
+
+      await this._cacheService.set(`likes:${albumId}`, rowCount);
+    }
+
+    return { likes: rowCount };
   }
 }
 
