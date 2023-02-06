@@ -23,7 +23,7 @@ class ExportsHandler {
     return h
       .response({
         status: 'success',
-        message: 'Permintaan Anda dalam antrean',
+        message: 'Permintaan Anda sedang kami proses',
       })
       .code(201);
   }
