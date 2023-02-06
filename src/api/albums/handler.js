@@ -1,7 +1,8 @@
 class AlbumsHandler {
-  constructor(albumsService, storageService, validator) {
+  constructor(albumsService, storageService, albumLikesService, validator) {
     this._albumsService = albumsService;
     this._storageService = storageService;
+    this._albumsLikedService = albumLikesService;
     this._validator = validator;
   }
 
@@ -60,7 +61,7 @@ class AlbumsHandler {
     const { id } = request.params;
     const { cover } = request.payload;
 
-    this._validator.validateAlbumImage(cover.hapi.headers);
+    this._validator.validateAlbumImagePayload(cover.hapi.headers);
     await this._albumsService.verifyAlbumExists(id);
 
     const filename = await this._storageService.writeFile(cover, cover.hapi, id);
@@ -74,6 +75,41 @@ class AlbumsHandler {
     });
 
     response.code(201);
+    return response;
+  }
+
+  async postAlbumLikeByIdHandler(request, h) {
+    const { userCredentialId: userId } = request.auth.credentials;
+    const { id: albumId } = request.params;
+    const album = { userId, albumId };
+
+    this._validator.validateAlbumLikePayload(album);
+    await this._albumsService.verifyAlbumExists(albumId);
+
+    const albumLikeExist = await this._albumsLikedService.toggleLikeAlbum(album);
+
+    return h
+      .response({
+        status: 'success',
+        message: albumLikeExist ? 'Batal suka berhasil' : 'Suka berhasil',
+      })
+      .code(201);
+  }
+
+  async getAlbumLikeByIdHandler(request, h) {
+    const { id: albumId } = request.params;
+
+    await this._albumsService.verifyAlbumExists(albumId);
+
+    const likes = await this._albumsLikedService.getAlbumLikes(albumId);
+
+    const response = h
+      .response({
+        status: 'success',
+        data: { likes },
+      })
+      .code(200);
+
     return response;
   }
 }
