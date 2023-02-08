@@ -14,7 +14,7 @@ exports.up = (pgm) => {
 
   pgm.addConstraint(
     'playlists_songs',
-    'fk_playlist_songs.playlist_id_playlist.id',
+    'fk_playlist_songs.playlist_id_playlists.id',
     'FOREIGN KEY(playlist_id) REFERENCES playlists(id) ON DELETE CASCADE',
   );
 
@@ -26,8 +26,8 @@ exports.up = (pgm) => {
 };
 
 exports.down = (pgm) => {
+  pgm.dropConstraint('playlists_songs', 'unique_playlist_id_and_song_id');
+  pgm.dropConstraint('playlists_songs', 'fk_playlist_songs.playlist_id_playlists.id');
+  pgm.dropConstraint('playlists_songs', 'fk_playlist_songs.song_id_songs.id');
   pgm.dropTable('playlists_songs');
-  pgm.dropConstraint('playlists_songs');
-  pgm.dropConstraint('fk_playlist_songs.playlist_id_playlists.id');
-  pgm.dropConstraint('fk_playlist_songs.song_id_songs.id');
 };

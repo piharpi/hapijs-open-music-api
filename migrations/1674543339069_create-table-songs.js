@@ -9,8 +9,8 @@ exports.up = (pgm) => {
     genre: { type: 'varchar(255)', notNull: true },
     duration: { type: 'smallint', notNull: false },
     album_id: { type: 'varchar(30)', notNull: false },
-    created_at: { type: 'text', notNull: true },
-    updated_at: { type: 'text', notNull: true },
+    created_at: { type: 'text', notNull: true, default: pgm.func('current_timestamp') },
+    updated_at: { type: 'text', notNull: true, default: pgm.func('current_timestamp') },
   });
 };
 
